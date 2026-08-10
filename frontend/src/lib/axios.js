@@ -2,7 +2,7 @@ import axios from "axios";
 import useAuthStore from "../store/useAuthStore.js"
 
 const api = axios.create({
-    baseURL: "https://eventbooking-api-8z1v.onrender.com", 
+    baseURL: "https://eventbooking-api-8z1v.onrender.com/api", 
     headers: {
         'Content-Type': 'application/json',
     }
