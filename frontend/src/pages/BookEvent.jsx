@@ -5,7 +5,7 @@ import seatIcon from "../assets/images/seat.png";
 import {io} from "socket.io-client";
 
 
-const socket = io("http://localhost:5000");
+const socket = io("https://eventbooking-api-8z1v.onrender.com");
 
 const BookEvent = () => {
     const { eventID } = useParams();
