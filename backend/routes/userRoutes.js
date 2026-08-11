@@ -3,7 +3,7 @@ import Event from "../models/Event.js";
 import User from "../models/User.js";
 import redisClient from "../config/redisClient.js";
 import jwt from "jsonwebtoken";
-import transporter from "../config/transporter.js";
+import sendEmail from "../config/transporter.js";
 import middleware from "../middleware/auth.middleware.js";
 import Booking from "../models/Booking.js";
 
@@ -77,19 +77,12 @@ router.post("/request-otp",async(req,res)=>{
         const redisKey=`otp:${email}`;
         await redisClient.set(redisKey,otp,{EX:300});
         console.log(`Redis key set for the otp : ${otp}`); 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: "Your Event Booking Login Code",
-            text: `Your One-Time Password (OTP) is: ${otp}. It will expire in 5 minutes.`
-        };
-        console.log("Mail parameters are:",mailOptions);
-        await transporter.sendMail(mailOptions);
+        await sendEmail(email, otp);
         console.log("OTP mail sent successfully");
         return res.status(200).json({sucess:true,message:"OTP sent successfully"});
     }
     catch(error){
-        console.log("Error in sendinf email OTP",error);
+        console.log("Error in sending email OTP",error);
         return res.status(500).json({sucess:false,message:"Error in sending email OTP"}); 
     }
 })
