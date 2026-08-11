@@ -31,7 +31,12 @@ const AuthLogin = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        const result = await login(formData);
+        const payload = {
+            email : formData.email,
+            otp:formData.otp,
+            role:role
+        }
+        const result = await login(payload);
         if(result.success){
             console.log("User logged in successfully");
             alert(result.message);
@@ -39,7 +44,7 @@ const AuthLogin = () => {
                 email:'',
                 otp:''
             })
-            if(role=="Organizer" || role=="organizer"){
+            if(role=="Organizer"){
                 navigate("/organizer/hostEvent");
             }
             else{

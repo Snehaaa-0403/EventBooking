@@ -17,7 +17,8 @@ router.post("/register",async(req,res)=>{
         return res.status(400).json({message:"Email is required to register the user",sucess:false});
     }
     try{
-        let user = await User.findOne({email:email});
+        const role =organizationName?"Organizer":"User"
+        let user = await User.findOne({email,role}); 
         if (user) {
             return res.status(409).json({message:"Another user already exists with this email.Try signing up with another email.",sucess:false});            
         }
@@ -97,13 +98,13 @@ router.post("/request-otp",async(req,res)=>{
 //Takes email and then verifies user through email OTP
 router.post("/login",async(req,res)=>{
     console.log("Entered login route");
-    const {email,otp} = req.body;
+    const {email,otp,role} = req.body;
     if(!email){
         console.log("Email is required for login process");
         return res.status(400).json({message:"Email is required for login process",success:false});
     }
     try{
-        const user = await User.findOne({email:email})
+        let user = await User.findOne({email,role}); 
         if(!user){
             console.log("User is visiting first time.He must sign up first");
             return res.status(409).json({message:"User is visiting first time.He must sign up first",success:false});
