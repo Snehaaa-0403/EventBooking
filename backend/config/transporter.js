@@ -15,11 +15,13 @@ const sendEmail = async (toEmail, otp) => {
     try {
         await sgMail.send(msg);
         console.log('Email sent successfully via SendGrid');
+        return true;
     } catch (error) {
         console.error('Error sending email with SendGrid:', error);
         if (error.response) {
             console.error(error.response.body);
         }
+        return false;
     }
 };
 

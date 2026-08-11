@@ -77,9 +77,14 @@ router.post("/request-otp",async(req,res)=>{
         const redisKey=`otp:${email}`;
         await redisClient.set(redisKey,otp,{EX:300});
         console.log(`Redis key set for the otp : ${otp}`); 
-        await sendEmail(email, otp);
-        console.log("OTP mail sent successfully");
-        return res.status(200).json({sucess:true,message:"OTP sent successfully"});
+        const result = await sendEmail(email, otp);
+        if(result){
+            console.log("OTP mail sent successfully");
+            return res.status(200).json({sucess:true,message:"OTP sent successfully"});
+        }
+        else{
+            return res.status(500).json({success:false,message:"Error in sending mail through sendGrid"});
+        }
     }
     catch(error){
         console.log("Error in sending email OTP",error);
